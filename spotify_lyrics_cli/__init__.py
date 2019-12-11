@@ -10,6 +10,7 @@ try:
 except ImportError:
     from urllib import quote_plus
 
+
 def get_lyrics_genius(artist, title, nocheck=False):
     title = re.sub(r"\(.*\)|\[.*\]", '', title) # (feat.) [extended cut]
     title = re.sub(r"-.*", '', title) # - Remastered ...
@@ -39,6 +40,7 @@ def get_lyrics_genius(artist, title, nocheck=False):
     lyrics = lyrics[2:] # Remove two newlines
     return lyrics
 
+
 def check_link_genius(artist, title, link):
     songinfo = "%s %s" % (artist, title)
     songinfo = songinfo.lower()
@@ -51,6 +53,7 @@ def check_link_genius(artist, title, link):
         if link.find(item) == -1:
             return False
     return True
+
 
 def get_song_info(player):
     if player == "mpd":

@@ -2,16 +2,33 @@
 
 import argparse
 import spotify_lyrics_cli
+import time
 
 def main():
-    parser = argparse.ArgumentParser(description="Display lyrics automatically")
-    parser.add_argument("player", type=str, help="e.g. spotify,vlc,...")
-    parser.add_argument("--nocheck", action="store_true", help="Don't check "
-                        "if the first google link actually is the desired song")
-    args = parser.parse_args()
-    artist, title = spotify_lyrics_cli.get_song_info(args.player)
-    print("%s - %s\n" % (artist.upper(), title.upper()))
-    print(spotify_lyrics_cli.get_lyrics_genius(artist, title, nocheck=args.nocheck))
+	parser = argparse.ArgumentParser(description="Display lyrics automatically")
+	parser.add_argument("player", type=str, help="e.g. spotify,vlc,...")
+	parser.add_argument("--nocheck", action="store_true", help="Don't check "
+						"if the first google link actually is the desired song")
+	parser.add_argument("--loop", action="store_true", help="Check for lyrics indefinitely")
+	args = parser.parse_args()
+	artist, title = spotify_lyrics_cli.get_song_info(args.player)
+	print_lyrics(artist, title, args)
+
+	while args.loop:
+		tmp_artist, tmp_title = spotify_lyrics_cli.get_song_info(args.player)
+		if artist != tmp_artist or title != tmp_title:
+			artist, title = tmp_artist, tmp_title
+			print_lyrics(artist, title, args)
+		time.sleep(5)
+	else:
+		print(spotify_lyrics_cli.get_lyrics_genius(artist, title, nocheck=args.nocheck))
+
+
+def print_lyrics(artist, title, *args):
+	print("=" * 80)
+	print("%s - %s\n" % (artist.upper(), title.upper()))
+	print(spotify_lyrics_cli.get_lyrics_genius(artist, title, nocheck=args.nocheck))
+
 
 if __name__ == "__main__":
-    main()
+	main()
