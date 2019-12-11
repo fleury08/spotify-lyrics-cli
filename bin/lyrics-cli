@@ -14,14 +14,12 @@ def main():
 	artist, title = spotify_lyrics_cli.get_song_info(args.player)
 	print_lyrics(artist, title, args)
 
-	while args.loop:
+	while args.loop: # if the loop is toggled search for new lyrics everytime the song changes
 		tmp_artist, tmp_title = spotify_lyrics_cli.get_song_info(args.player)
-		if artist != tmp_artist or title != tmp_title:
+		if artist != tmp_artist or title != tmp_title: # if the song is different are different print another lyric
 			artist, title = tmp_artist, tmp_title
 			print_lyrics(artist, title, args)
-		time.sleep(5)
-	else:
-		print(spotify_lyrics_cli.get_lyrics_genius(artist, title, nocheck=args.nocheck))
+		time.sleep(5) # no need to take resources in loop, could be set to be a parameter
 
 
 def print_lyrics(artist, title, *args):
